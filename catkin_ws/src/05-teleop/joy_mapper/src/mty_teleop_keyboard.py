@@ -31,7 +31,7 @@ class JoyMapper(object):
         self.simulated_vehicle_length = self.setupParam("~simulated_vehicle_length", 0.18)
 
         # Publications
-        self.pub_car_cmd = rospy.Publisher("~car_cmd", Twist2DStamped, queue_size=1)
+        self.pub_car_cmd = rospy.Publisher("/duckiebot1/car_cmd", Twist2DStamped, queue_size=1)
         self.pub_joy_override = rospy.Publisher("~joystick_override", BoolStamped, queue_size=1)
         self.pub_parallel_autonomy = rospy.Publisher("~parallel_autonomy",BoolStamped, queue_size=1)
         self.pub_anti_instagram = rospy.Publisher("anti_instagram_node/click",BoolStamped, queue_size=1)
@@ -67,10 +67,14 @@ class JoyMapper(object):
         while(1):
             key = self.getKey(settings)
             car_cmd_msg = Twist2DStamped()
-            car_cmd_msg.header.stamp = self.joy.header.stamp
+            car_cmd_msg.header.seq = 0
+            car_cmd_msg.header.stamp.secs = 0
+            car_cmd_msg.header.stamp.nsecs = 0
+            car_cmd_msg.header.frame_id = ''
             if key == 'w':  
                 car_cmd_msg.v = 0.1
                 car_cmd_msg.omega = 0.0
+                print('w')
                 
             elif key == 's':
                 car_cmd_msg.v = -0.1
@@ -98,7 +102,7 @@ class JoyMapper(object):
 
 
 if __name__ == "__main__":
-    rospy.init_node("my_teleop_keyboard",anonymous=False)
+    rospy.init_node("mty_teleop_keyboard",anonymous=False)
     joy_mapper = JoyMapper()
     joy_mapper.publishControl()
     rospy.spin()
