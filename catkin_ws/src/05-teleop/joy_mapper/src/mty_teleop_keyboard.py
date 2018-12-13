@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#coding:utf-8
 import rospy
 import math
 import sys, select, termios, tty
@@ -61,38 +62,31 @@ class JoyMapper(object):
         return value
 
     def publishControl(self):
+        print(usage)
         settings = termios.tcgetattr(sys.stdin)
         while(1):
-            try:
-                key = self.getKey(settings)
-                car_cmd_msg = Twist2DStamped()
-                car_cmd_msg.header.stamp = self.joy.header.stamp
-
-                if key == 'w':  
-                    car_cmd_msg.v = 0.1
-                    car_cmd_msg.omega = 0.0
-                
-                elif key == 's':
-                    car_cmd_msg.v = -0.1
-                    car_cmd_msg.omega = 0.0               
-                elif key == 'a':
-                    car_cmd_msg.v = 0.0
-                    car_cmd_msg.omega = 1.0
-                elif key == 'd':
-                    car_cmd_msg.v = 0.0
-                    car_cmd_msg.omega = -1.0
-                elif (key == '\x03'):
-                    break
-                else:
-                    car_cmd_msg.v = 0.0
-                    car_cmd_msg.omega = 0.0    
-                self.pub_car_cmd.publish(car_cmd_msg)    
-            except:
-                print(usage)   
-            finally:
-                car_cmd_msg = Twist2DStamped()
-                car_cmd_msg.v = 0.0
+            key = self.getKey(settings)
+            car_cmd_msg = Twist2DStamped()
+            car_cmd_msg.header.stamp = self.joy.header.stamp
+            if key == 'w':  
+                car_cmd_msg.v = 0.1
                 car_cmd_msg.omega = 0.0
+                
+            elif key == 's':
+                car_cmd_msg.v = -0.1
+                car_cmd_msg.omega = 0.0               
+            elif key == 'a':
+                car_cmd_msg.v = 0.0
+                car_cmd_msg.omega = 1.0
+            elif key == 'd':
+                car_cmd_msg.v = 0.0
+                car_cmd_msg.omega = -1.0
+            elif (key == '\x03'):
+                break
+            else:
+                car_cmd_msg.v = 0.0
+                car_cmd_msg.omega = 0.0    
+            self.pub_car_cmd.publish(car_cmd_msg)    
 
     #获取键盘输入
     def getKey(self,settings):
