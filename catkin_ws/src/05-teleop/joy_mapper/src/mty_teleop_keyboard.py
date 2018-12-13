@@ -4,10 +4,15 @@ import math
 import sys, select, termios, tty
 
 from duckietown_msgs.msg import Twist2DStamped, BoolStamped
-from sensor_msgs.msg import Joy
 
 from __builtin__ import True
-
+usage = '''
+    Usage: 
+        'w' to forward;
+        's' to backward;
+        'a' to turn left;
+        'd' to turn right;
+'''
 class JoyMapper(object):
     def __init__(self):
         self.node_name = rospy.get_name()
@@ -58,36 +63,37 @@ class JoyMapper(object):
     def publishControl(self):
         settings = termios.tcgetattr(sys.stdin)
         while(1):
-            key = self.getKey(settings)
-            car_cmd_msg = Twist2DStamped()
-            car_cmd_msg.header.stamp = self.joy.header.stamp
+            try:
+                key = self.getKey(settings)
+                car_cmd_msg = Twist2DStamped()
+                car_cmd_msg.header.stamp = self.joy.header.stamp
 
-            if key == 'w':
-                car_cmd_msg.v = 0.1
+                if key == 'w':  
+                    car_cmd_msg.v = 0.1
+                    car_cmd_msg.omega = 0.0
+                
+                elif key == 's':
+                    car_cmd_msg.v = -0.1
+                    car_cmd_msg.omega = 0.0               
+                elif key == 'a':
+                    car_cmd_msg.v = 0.0
+                    car_cmd_msg.omega = 1.0
+                elif key == 'd':
+                    car_cmd_msg.v = 0.0
+                    car_cmd_msg.omega = -1.0
+                elif (key == '\x03'):
+                    break
+                else:
+                    car_cmd_msg.v = 0.0
+                    car_cmd_msg.omega = 0.0    
+                self.pub_car_cmd.publish(car_cmd_msg)    
+            except:
+                print(usage)   
+            finally:
+                car_cmd_msg = Twist2DStamped()
+                car_cmd_msg.v = 0.0
                 car_cmd_msg.omega = 0.0
-            elif key == 's':
-                car_cmd_msg.v = -0.1
-                car_cmd_msg.omega = 0.0               
-            elif key == 'a':
-                car_cmd_msg.v = 0.0
-                car_cmd_msg.omega = 1.0
-            elif key == 'd':
-                car_cmd_msg.v = 0.0
-                car_cmd_msg.omega = -1.0
-            elif (key == '\x03'):
-                break
-            else:
-                car_cmd_msg.v = 0.0
-                car_cmd_msg.omega = 0.0           
-            if self.bicycle_kinematics:
-                # Implements Bicycle Kinematics - Nonholonomic Kinematics
-             # see https://inst.eecs.berkeley.edu/~ee192/sp13/pdf/steer-control.pdf
-                steering_angle = self.joy.axes[3] * self.steer_angle_gain
-                car_cmd_msg.omega = car_cmd_msg.v / self.simulated_vehicle_length * math.tan(steering_angle)
-            else:
-                # Holonomic Kinematics for Normal Driving
-                car_cmd_msg.omega = self.joy.axes[3] * self.omega_gain
-            self.pub_car_cmd.publish(car_cmd_msg)
+
     #获取键盘输入
     def getKey(self,settings):
 	    tty.setraw(sys.stdin.fileno())
