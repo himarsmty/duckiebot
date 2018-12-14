@@ -21,7 +21,7 @@ def callback(data):
     else:
         pass
  
-def displayWebcam():
+def displayScicam():
     
     rospy.init_node('webcam_display', anonymous=True)
     # make a video_object and init the video object
@@ -34,5 +34,5 @@ def displayWebcam():
  
 if __name__ == '__main__':
     print('ready to receiving images')
-    displayWebcam()
+    displayScicam()
 
