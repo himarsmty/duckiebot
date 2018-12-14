@@ -8,7 +8,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
  
 def callback(data):
-    print('received an image')
+    # print('received an image')
     # define picture to_down' coefficient of ratio
     scaling_factor = 0.5
     global count,bridge
@@ -17,7 +17,7 @@ def callback(data):
         count = 0
         cv_img = bridge.imgmsg_to_cv2(data, "bgr8")
         cv2.imshow("frame" , cv_img)
-        cv2.waitKey(3)
+        cv2.waitKey(1)
     else:
         pass
  
