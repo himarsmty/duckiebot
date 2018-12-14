@@ -10,7 +10,7 @@ import sys
 
 def SciImagePub():
     rospy.init_node('cameraprocess', anonymous=True)
-    img_pub = rospy.Publisher('/sci/image_raw', Image, queue_size=2)
+    img_pub = rospy.Publisher('sci/image_raw', Image, queue_size=2)
     rate = rospy.Rate(5)
     cap = cv2.VideoCapture(0)
     scaling_factor = 0.5
@@ -19,27 +19,26 @@ def SciImagePub():
         sys.stdout.write('sci camera is not open!')
         return -1
     count = 0
+    print('camera opened sucessfully')
     while not rospy.is_shutdown():
-        ret, frame = cap.read()
-        if ret:
-            count += 1
-        else:
-            rospy.loginfo('capturing image failed.')
-        if count == 2:
-            count = 0
-            frame = cv2.resize(
-                frame,
-                None,
-                fx=scaling_factor,
-                fy=scaling_factor,
-                imterpolation=cv2.INTER_AREA)
-            msg = bridge.cv2_to_imgmsg(frame, encoding='bgr8')
-            print ('publishing frame ...')
-        rate.sleep()
+        while(1):
+            ret, frame = cap.read()
+            print('sending image ...')
+            if ret:
+                count += 1
+            else:
+                rospy.loginfo('capturing image failed.')
+            if count == 2:
+                count = 0
+                frame = cv2.resize(
+                    frame,
+                    None,
+                    fx=scaling_factor,
+                    fy=scaling_factor,
+                    imterpolation=cv2.INTER_AREA)
+                msg = bridge.cv2_to_imgmsg(frame, encoding='bgr8')
+                print ('publishing frame ...')
+            rate.sleep()
     
     if __name__ == '__main__':
-        try:
-            SciImagePub()
-        except rospy.ROSInternalException:
-            pass 
-
+        SciImagePub()
