@@ -25,7 +25,7 @@ def callback(msg):
         print(msg.data)
         car_cmd_msg.v = 0.0
         car_cmd_msg.omega = 1.0
-    self.pub_car_cmd.publish(car_cmd_msg)
+    pub_car_cmd.publish(car_cmd_msg)
 
 
 class JoyMapper(object):
@@ -46,10 +46,6 @@ class JoyMapper(object):
             "~simulated_vehicle_length", 0.18)
 
         # Publications
-        self.pub_car_cmd = rospy.Publisher(
-            "/duckiebot1/joy_mapper_node/car_cmd",
-            Twist2DStamped,
-            queue_size=1)
         self.pub_joy_override = rospy.Publisher(
             "~joystick_override", BoolStamped, queue_size=1)
         self.pub_parallel_autonomy = rospy.Publisher(
@@ -91,5 +87,7 @@ class JoyMapper(object):
 if __name__ == "__main__":
     rospy.init_node("qrcode_mapper", anonymous=True)
     joy_mapper = JoyMapper()
+    pub_car_cmd = rospy.Publisher(
+        "/duckiebot1/joy_mapper_node/car_cmd", Twist2DStamped, queue_size=1)
     rospy.Subscriber('sci/qr_cmd', String, callback=callback)
     rospy.spin()
