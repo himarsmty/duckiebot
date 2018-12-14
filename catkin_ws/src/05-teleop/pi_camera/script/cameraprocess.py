@@ -16,14 +16,13 @@ def SciImagePub():
     scaling_factor = 0.5
     bridge = CvBridge()
     if not cap.isOpened():
-        sys.stdout.write('sci camera is not open!')
+        sys.stdout.write('sci camera is not open!\n')
         return -1
     count = 0
     print('camera opened sucessfully')
     while not rospy.is_shutdown():
         while(1):
             ret, frame = cap.read()
-            print('sending image ...')
             if ret:
                 count += 1
             else:
@@ -35,10 +34,11 @@ def SciImagePub():
                     None,
                     fx=scaling_factor,
                     fy=scaling_factor,
-                    imterpolation=cv2.INTER_AREA)
+                    interpolation=cv2.INTER_AREA)
                 msg = bridge.cv2_to_imgmsg(frame, encoding='bgr8')
+                img_pub.publish(msg)
                 print ('publishing frame ...')
             rate.sleep()
     
-    if __name__ == '__main__':
-        SciImagePub()
+if __name__ == '__main__':
+    SciImagePub()

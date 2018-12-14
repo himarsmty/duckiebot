@@ -32,4 +32,6 @@ def displayWebcam():
     rospy.spin()
  
 if __name__ == '__main__':
+    print('ready to receiving images')
     displayWebcam()
+
