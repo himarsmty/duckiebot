@@ -9,6 +9,7 @@ from cv_bridge import CvBridge, CvBridgeError
 import cv2
 import zbar
 import PIL.Image as pImage
+import sys
 
 
 def callback(data):
@@ -31,8 +32,7 @@ def callback(data):
         scanner.scan(image)
         cmd_puber = rospy.Publisher('sci/qr_cmd', String, queue_size = 10)   
         for symbol in image:
-            cmd_data = symbol.data.decode('utf-8').encode('sjis').decode('utf-8')
-            print(cmd_data)
+            cmd_data = unicode(symbol.data, 'utf-8')
             cmd_puber.publish(cmd_data)
         cv2.waitKey(10)
     else:
@@ -52,5 +52,7 @@ def displayScicam():
 
 
 if __name__ == '__main__':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
     print('ready to receiving images')
     displayScicam()

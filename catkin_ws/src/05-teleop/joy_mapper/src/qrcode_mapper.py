@@ -7,7 +7,6 @@ from std_msgs.msg import String
 
 from __builtin__ import True
 
-
 def callback(msg):
     car_cmd_msg = Twist2DStamped()
     car_cmd_msg.header.seq = 0
@@ -15,25 +14,17 @@ def callback(msg):
     car_cmd_msg.header.stamp = now
     if msg.data = '前进':
         print(msg.data)
-        # car_cmd_msg.v = 0.1
-        # car_cmd_msg.omega = 0.0
+        car_cmd_msg.v = 0.1
+        car_cmd_msg.omega = 0.0
     if msg.data = '右转':
         print(msg.data)
-        # car_cmd_msg.v = -0.1
-        # car_cmd_msg.omega = 0.0
+        car_cmd_msg.v = 0.0
+        car_cmd_msg.omega = -1.0
     if msg.data = '左转':
         print(msg.data)
-        # car_cmd_msg.v = 0.0
-        # car_cmd_msg.omega = 1.0
-    # elif key == 'd':
-    #     car_cmd_msg.v = 0.0
-    #     car_cmd_msg.omega = -1.0
-    # elif (key == '\x03'):
-    #     break
-    # else:
-    #     car_cmd_msg.v = 0.0
-    #     car_cmd_msg.omega = 0.0
-    # self.pub_car_cmd.publish(car_cmd_msg)
+        car_cmd_msg.v = 0.0
+        car_cmd_msg.omega = 1.0
+    self.pub_car_cmd.publish(car_cmd_msg)
 
 
 class JoyMapper(object):

@@ -26,7 +26,7 @@ def SciImagePub():
             count += 1
         else:
             rospy.loginfo('capturing image failed.')
-        if count == 2:
+        if count == 3:
             count = 0
             frame = cv2.resize(
                 frame,
