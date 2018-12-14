@@ -13,16 +13,14 @@ def callback(msg):
     car_cmd_msg.header.seq = 0
     now = rospy.get_rostime()
     car_cmd_msg.header.stamp = now
+    print(msg.data)
     if msg.data == '前进':
-        print(msg.data)
         car_cmd_msg.v = 0.1
         car_cmd_msg.omega = 0.0
     if msg.data == '右转':
-        print(msg.data)
         car_cmd_msg.v = 0.0
         car_cmd_msg.omega = -1.0
     if msg.data == '左转':
-        print(msg.data)
         car_cmd_msg.v = 0.0
         car_cmd_msg.omega = 1.0
     pub_car_cmd.publish(car_cmd_msg)
