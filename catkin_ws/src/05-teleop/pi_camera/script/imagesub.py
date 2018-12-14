@@ -22,12 +22,13 @@ def callback(data):
         pass
  
 def displayWebcam():
+    
     rospy.init_node('webcam_display', anonymous=True)
- 
     # make a video_object and init the video object
     global count,bridge
     count = 0
     bridge = CvBridge()
+    print('ready to receive ...')
     rospy.Subscriber('sci/image_raw', Image, callback)
     rospy.spin()
  
