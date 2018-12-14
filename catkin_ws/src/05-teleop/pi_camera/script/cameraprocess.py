@@ -22,23 +22,24 @@ def SciImagePub():
     print('camera opened sucessfully')
     while not rospy.is_shutdown():
         while(1):
-            ret, frame = cap.read()
-            if ret:
-                count += 1
-            else:
-                rospy.loginfo('capturing image failed.')
-            if count == 2:
-                count = 0
-                frame = cv2.resize(
-                    frame,
-                    None,
-                    fx=scaling_factor,
-                    fy=scaling_factor,
-                    interpolation=cv2.INTER_AREA)
-                msg = bridge.cv2_to_imgmsg(frame, encoding='bgr8')
-                img_pub.publish(msg)
-                print ('publishing frame ...')
-            rate.sleep()
+            try:
+                ret, frame = cap.read()
+                if ret:
+                    count += 1
+                else:
+                    rospy.loginfo('capturing image failed.')
+                if count == 2:
+                    count = 0
+                    frame = cv2.resize(
+                        frame,
+                        None,
+                        fx=scaling_factor,
+                        fy=scaling_factor,
+                        interpolation=cv2.INTER_AREA)
+                    msg = bridge.cv2_to_imgmsg(frame, encoding='bgr8')
+                    img_pub.publish(msg)
+                    #print ('publishing frame ...')
+                rate.sleep()
     
 if __name__ == '__main__':
     SciImagePub()
