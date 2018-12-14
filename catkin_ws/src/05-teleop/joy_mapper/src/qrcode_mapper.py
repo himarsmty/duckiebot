@@ -9,19 +9,22 @@ from __builtin__ import True
 
 
 def callback(msg):
-    # car_cmd_msg = Twist2DStamped()
-    # car_cmd_msg.header.seq = 0
-    # now = rospy.get_rostime()
-    # car_cmd_msg.header.stamp = now
-    # if key == 'w':
-    #     car_cmd_msg.v = 0.1
-    #     car_cmd_msg.omega = 0.0
-    # elif key == 's':
-    #     car_cmd_msg.v = -0.1
-    #     car_cmd_msg.omega = 0.0
-    # elif key == 'a':
-    #     car_cmd_msg.v = 0.0
-    #     car_cmd_msg.omega = 1.0
+    car_cmd_msg = Twist2DStamped()
+    car_cmd_msg.header.seq = 0
+    now = rospy.get_rostime()
+    car_cmd_msg.header.stamp = now
+    if msg.data = '前进':
+        print(msg.data)
+        # car_cmd_msg.v = 0.1
+        # car_cmd_msg.omega = 0.0
+    if msg.data = '右转':
+        print(msg.data)
+        # car_cmd_msg.v = -0.1
+        # car_cmd_msg.omega = 0.0
+    if msg.data = '左转':
+        print(msg.data)
+        # car_cmd_msg.v = 0.0
+        # car_cmd_msg.omega = 1.0
     # elif key == 'd':
     #     car_cmd_msg.v = 0.0
     #     car_cmd_msg.omega = -1.0
@@ -31,7 +34,6 @@ def callback(msg):
     #     car_cmd_msg.v = 0.0
     #     car_cmd_msg.omega = 0.0
     # self.pub_car_cmd.publish(car_cmd_msg)
-    print(msg.data)
 
 
 class JoyMapper(object):
